@@ -121,6 +121,14 @@ namespace ONIModLauncher
 				return SupportsCurrentDLC;
 			}
 		}
+		public bool CanEditPending
+		{
+			get
+			{
+				if (ParsedLegacyCompatibility) return true;
+				return SupportsCurrentDLC;
+			}
+		}
 
 		internal bool enabledForVanilla = false;
 		internal bool enabledForSpacedOut = false;
@@ -209,11 +217,28 @@ namespace ONIModLauncher
 				InvokePropertyChanged(nameof(IsBroken));
 			}
 		}
+		public bool HasTogglePending
+		{
+			get => ModManager.Instance.Settings.HasPending(UniqueKey);
+			set
+			{
+				if (value)
+				{
+					ModManager.Instance.Settings.AddPending(UniqueKey);
+				}
+				else
+				{
+					ModManager.Instance.Settings.RemovePending(UniqueKey);
+				}
+				InvokePropertyChanged(nameof(IsBroken));
+			}
+		}
 
 		public LauncherMetadataJson LauncherData
 		{ get; set; }
 
 		public bool IsEditable => !Launcher.Instance.IsRunning;
+		public bool IsNotEditable => Launcher.Instance.IsRunning;
 
 		public ICommand OpenConfigCommand
 		{ get; private set; }
