@@ -23,14 +23,16 @@ namespace ONIModLauncher.Configs
 
 		public bool HasPending(string uid) => ToToggleMods.Contains(uid);
 
-		public void ApplyPendingToggleChanges(ModConfigJson modConfig)
+		public void ApplyPendingToggleChanges(ModConfigJson modConfig, out bool hadToggles)
 		{
+			hadToggles = false;
 			var currentlyActiveDlc = Launcher.Instance.PlayerPrefs.SpacedOutEnabled ? DLC.SpacedOut : "";
 			foreach (var mod in modConfig.mods)
 			{
 				var uniqueModId = ModUniqueIdentifier(mod);
 				if (ToToggleMods.Contains(uniqueModId))
 				{
+					hadToggles = true;
 					if (mod.enabledForDlc.Contains(currentlyActiveDlc))
 						mod.enabledForDlc.Remove(currentlyActiveDlc);
 					else
@@ -47,7 +49,7 @@ namespace ONIModLauncher.Configs
 		}
 		public void RemovePending(string id)
 		{
-			ToToggleMods.Add(id);
+			ToToggleMods.Remove(id);
 			InvokePropertyChanged(nameof(ToToggleMods));
 		}
 
