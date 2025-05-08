@@ -89,6 +89,9 @@ namespace ONIModLauncher
 		public bool RepoIsGithub
 		{ get; set; }
 
+		public ModStatus Status
+		{ get; set; } 
+
 		public ModType Type
 		{ get; set; }
 
